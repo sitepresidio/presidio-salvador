@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presídio Salvador - Lista de Visitas</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fila de Visitas · sequencial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
     <style>
         * {
             margin: 0;
@@ -12,303 +13,561 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background: #f0f5fe;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        .card {
+            max-width: 700px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 2.5rem;
+            box-shadow: 0 20px 40px -12px rgba(0, 20, 40, 0.2);
+            padding: 2rem 2rem 2.2rem;
         }
 
         h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 5px;
-            font-size: 24px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 14px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #666;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: #555;
-        }
-
-        .table-section {
-            margin-top: 30px;
-        }
-
-        .table-header {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b1e33;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
+            gap: 0.5rem;
+            margin-bottom: 0.2rem;
         }
 
-        .table-title {
-            color: #333;
-            font-size: 18px;
-            font-weight: bold;
+        .sub {
+            color: #3d5a73;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-left: 4px solid #2d7aff;
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+            background: #f0f6fe;
+            border-radius: 0 12px 12px 0;
+            padding: 0.5rem 1rem;
+            display: inline-block;
         }
 
-        .counter {
-            background-color: #333;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 12px;
+        .status-box {
+            background: #f8fbff;
+            border-radius: 1.5rem;
+            padding: 1.5rem 1.2rem;
+            border: 1px solid #e2ebf5;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .posicao-destaque {
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            flex-wrap: wrap;
         }
 
-        th {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            text-align: left;
-            font-size: 13px;
+        .posicao-numero {
+            font-size: 3.4rem;
+            font-weight: 700;
+            color: #0b1e33;
+            line-height: 1;
         }
 
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            font-size: 14px;
+        .posicao-label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #3d5a73;
+            margin-left: 0.2rem;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        .total-fila {
+            background: #e8eff8;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1d3a5c;
         }
 
-        tr:hover {
-            background-color: #f0f0f0;
+        .total-fila span {
+            font-weight: 700;
+            color: #0b1e33;
         }
 
-        .delete-btn {
-            background-color: #dc3545;
-            color: white;
+        .card-input {
+            background: #ffffff;
+            border-radius: 1.25rem;
+            padding: 1.5rem 1.2rem;
+            box-shadow: 0 4px 12px rgba(0, 20, 40, 0.04);
+            border: 1px solid #e2eaf2;
+            margin-bottom: 1.8rem;
+        }
+
+        .card-input label {
+            display: block;
+            font-weight: 600;
+            color: #1f3a57;
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .input-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .input-row input {
+            flex: 2 1 200px;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid #d4dde8;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: #fafcff;
+            transition: 0.15s;
+            outline: none;
+            font-weight: 500;
+        }
+
+        .input-row input:focus {
+            border-color: #2d7aff;
+            box-shadow: 0 0 0 3px rgba(45, 122, 255, 0.2);
+            background: white;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            flex: 1 0 auto;
+        }
+
+        .btn-group button {
+            flex: 1 0 auto;
             border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
+            border-radius: 60px;
+            padding: 0.8rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 12px;
-            width: auto;
-            margin: 0;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
         }
 
-        .delete-btn:hover {
-            background-color: #c82333;
+        .btn-cadastrar {
+            background: #1a3b5c;
+            color: white;
         }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            display: none;
-            z-index: 1000;
+        .btn-cadastrar:hover {
+            background: #0f2a44;
+            transform: scale(0.98);
         }
 
-        .notification.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .btn-buscar {
+            background: #e8eff8;
+            color: #1a3b5c;
         }
 
-        .notification.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .btn-buscar:hover {
+            background: #d5e2f0;
+            transform: scale(0.98);
+        }
+
+        .info-box {
+            background: #f2f8ff;
+            border-radius: 1rem;
+            padding: 1rem 1.4rem;
+            border-left: 5px solid #2d7aff;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.8rem 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .info-box .icone {
+            font-size: 1.6rem;
+        }
+
+        .info-box .mensagem {
+            font-weight: 500;
+            color: #1d3a5c;
+            flex: 1;
+        }
+
+        .info-box .mensagem strong {
+            color: #0b1e33;
+        }
+
+        .detalhes-fila {
+            margin-top: 1.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 0.5rem;
+            background: #fafdff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 60px;
+            border: 1px solid #e3ecf5;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1f3a57;
+        }
+
+        .detalhes-fila span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .badge {
+            background: #e3ecf5;
+            border-radius: 40px;
+            padding: 0.2rem 0.9rem;
+            font-weight: 600;
+            color: #0b1e33;
+        }
+
+        .footer-note {
+            margin-top: 1.8rem;
+            font-size: 0.8rem;
+            color: #6d7f92;
+            text-align: center;
+            border-top: 1px solid #e5edf6;
+            padding-top: 1.2rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-note a {
+            color: #1a3b5c;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px dashed #b6cade;
+            cursor: pointer;
+        }
+
+        .footer-note a:hover {
+            color: #0b1e33;
+            border-bottom: 1px solid #0b1e33;
+        }
+
+        .aviso-cadastro {
+            font-size: 0.85rem;
+            color: #4f6b84;
+            margin-top: 0.5rem;
+            background: #f4f9ff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 1.5rem; }
+            .posicao-numero { font-size: 2.6rem; }
+            .status-box { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+            .btn-group { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>PRESÍDIO SALVADOR</h1>
-        <p class="subtitle">Lista de Visitas</p>
-        
-        <div class="form-group">
-            <label for="nome">Nome do Visitante:</label>
-            <input type="text" id="nome" placeholder="Digite o nome completo">
-        </div>
-        
-        <button onclick="adicionarPessoa()">Adicionar à Lista</button>
 
-        <div class="table-section">
-            <div class="table-header">
-                <span class="table-title">Lista de Espera</span>
-                <span class="counter" id="counter">0 pessoas</span>
-            </div>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>Posição</th>
-                        <th>Nome</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelaFila">
-                    <!-- Dados serão inseridos aqui -->
-                </tbody>
-            </table>
+<div class="card">
+    <h1>📋 Fila de Visitas</h1>
+    <div class="sub">cadastro automático · sequencial</div>
+
+    <!-- status principal -->
+    <div class="status-box">
+        <div class="posicao-destaque">
+            <span class="posicao-numero" id="posicaoAtual">—</span>
+            <span class="posicao-label">º na fila</span>
+        </div>
+        <div class="total-fila">
+            👥 <span id="totalPessoas">0</span> total
         </div>
     </div>
 
-    <div class="notification" id="notification"></div>
+    <!-- área de cadastro / consulta -->
+    <div class="card-input">
+        <label for="nomeInput">✏️ Seu nome (ex: Linda, João, Ana)</label>
+        <div class="input-row">
+            <input type="text" id="nomeInput" placeholder="Digite seu nome base" value="Linda" />
+            <div class="btn-group">
+                <button class="btn-cadastrar" id="cadastrarBtn">➕ Cadastrar</button>
+                <button class="btn-buscar" id="buscarBtn">🔍 Minha posição</button>
+            </div>
+        </div>
+        <div class="aviso-cadastro">
+            ⚡ O sistema adiciona um número automaticamente: <strong>ex: Linda → Linda1, Linda2...</strong>
+        </div>
+    </div>
 
-    <script>
-        // SEU LINK DA API
-        const API_URL = 'https://script.google.com/macros/s/AKfycbz1ruTjJZaCemdffTDHFbdaXvHL8bcYRO7atByQkwUWNwWlN--hq-rSuIrJPb7iUDwC/exec';
+    <!-- mensagem de retorno -->
+    <div class="info-box" id="infoBox">
+        <div class="icone">📍</div>
+        <div class="mensagem" id="mensagemInfo">
+            Digite seu nome e clique em <strong>“Cadastrar”</strong> ou <strong>“Minha posição”</strong>
+        </div>
+    </div>
 
-        function mostrarNotificacao(mensagem, tipo) {
-            const notification = document.getElementById('notification');
-            notification.textContent = mensagem;
-            notification.className = `notification ${tipo}`;
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
+    <!-- detalhes da fila -->
+    <div class="detalhes-fila">
+        <span>📌 Primeiro: <span id="primeiroNome">—</span></span>
+        <span>🕒 Último: <span id="ultimoNome">—</span></span>
+        <span class="badge" id="statusFila">aguardando</span>
+    </div>
+
+    <div class="footer-note">
+        <span>📊 Dados via Google Sheets ·</span>
+        <a id="refreshLink">↻ atualizar</a>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ----- CONFIGURAÇÃO COM SEUS LINKS -----
+        // ID extraído do link da planilha
+        const SPREADSHEET_ID = '2PACX-1vSWP4uTPdGviPuXwFg85oGpog5_7lI7jML9h6fb6hMRozi4VuS5cpbiFW3aXTM5p5UiCtS6lghPuLFq';
+        const APPEND_URL = 'https://script.google.com/macros/s/AKfycbybfdxCyPUWG9P8AOLxQq_2iuKsEZ1IDorJzZeIdphjRvrk_yIjy764EXvZaKNTfQ4n/exec';
+        
+        // URL para leitura dos dados (formato CSV)
+        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
+
+        // Elementos DOM
+        const posicaoAtualEl = document.getElementById('posicaoAtual');
+        const totalPessoasEl = document.getElementById('totalPessoas');
+        const primeiroNomeEl = document.getElementById('primeiroNome');
+        const ultimoNomeEl = document.getElementById('ultimoNome');
+        const statusFilaEl = document.getElementById('statusFila');
+        const mensagemInfoEl = document.getElementById('mensagemInfo');
+        const nomeInput = document.getElementById('nomeInput');
+        const cadastrarBtn = document.getElementById('cadastrarBtn');
+        const buscarBtn = document.getElementById('buscarBtn');
+        const refreshLink = document.getElementById('refreshLink');
+
+        let filaData = [];
+
+        // ----- Carregar planilha -----
+        async function carregarPlanilha() {
+            try {
+                const response = await fetch(CSV_URL, { cache: 'no-store' });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const csvText = await response.text();
+
+                const linhas = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+                filaData = linhas.map(line => {
+                    const campos = line.split(',');
+                    return campos.length > 0 ? campos[0].trim() : '';
+                }).filter(nome => nome !== '');
+
+                atualizarInterface();
+                return true;
+            } catch (error) {
+                console.error('Erro:', error);
+                mensagemInfoEl.innerHTML = `⚠️ Erro ao carregar dados: <strong>${error.message}</strong>`;
+                return false;
+            }
         }
 
-        async function adicionarPessoa() {
-            const nome = document.getElementById('nome').value.trim();
+        // ----- Atualizar interface -----
+        function atualizarInterface() {
+            const total = filaData.length;
+            totalPessoasEl.textContent = total;
 
-            if (!nome) {
-                mostrarNotificacao('Por favor, digite o nome!', 'error');
+            if (total > 0) {
+                primeiroNomeEl.textContent = filaData[0] || '—';
+                ultimoNomeEl.textContent = filaData[total - 1] || '—';
+                statusFilaEl.textContent = '🟢 ativa';
+                statusFilaEl.style.background = '#dff0d8';
+            } else {
+                primeiroNomeEl.textContent = '—';
+                ultimoNomeEl.textContent = '—';
+                statusFilaEl.textContent = '⏸️ vazia';
+                statusFilaEl.style.background = '#f1f3f4';
+            }
+
+            // Atualiza posição do nome atual
+            const nomeBuscado = nomeInput.value.trim();
+            if (nomeBuscado === '') {
+                posicaoAtualEl.textContent = '?';
                 return;
             }
 
-            try {
-                const response = await fetch(`${API_URL}?action=adicionar&nome=${encodeURIComponent(nome)}`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    mostrarNotificacao(data.message, 'success');
-                    document.getElementById('nome').value = '';
-                    carregarFila();
-                } else {
-                    mostrarNotificacao(data.message, 'error');
-                    document.getElementById('nome').value = '';
-                }
-            } catch (error) {
-                mostrarNotificacao('Erro ao conectar com o servidor!', 'error');
+            if (total === 0) {
+                posicaoAtualEl.textContent = '—';
+                return;
+            }
+
+            // Busca por nome base (sem número) - encontra o primeiro que começa com o nome
+            const encontrados = filaData.filter(n => n.toLowerCase().startsWith(nomeBuscado.toLowerCase()));
+            if (encontrados.length > 0) {
+                const primeiroEncontrado = encontrados[0];
+                const posicao = filaData.indexOf(primeiroEncontrado);
+                posicaoAtualEl.textContent = posicao + 1;
+            } else {
+                posicaoAtualEl.textContent = '—';
             }
         }
 
-        async function removerPessoa(nome) {
-            if (confirm('Remover ' + nome + ' da lista?')) {
-                try {
-                    const response = await fetch(`${API_URL}?action=remover&nome=${encodeURIComponent(nome)}`);
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        mostrarNotificacao(data.message, 'success');
-                        carregarFila();
-                    } else {
-                        mostrarNotificacao(data.message, 'error');
+        // ----- Gerar próximo nome sequencial -----
+        function gerarProximoNome(base) {
+            // Filtra todos os nomes que começam com a base (case insensitive)
+            const regex = new RegExp(`^${base}(\\d*)$`, 'i');
+            const numeros = filaData
+                .map(nome => {
+                    const match = nome.match(regex);
+                    if (match) {
+                        return match[1] === '' ? 0 : parseInt(match[1], 10);
                     }
-                } catch (error) {
-                    mostrarNotificacao('Erro ao conectar com o servidor!', 'error');
-                }
+                    return null;
+                })
+                .filter(n => n !== null);
+
+            let proximoNumero = 0;
+            if (numeros.length > 0) {
+                proximoNumero = Math.max(...numeros) + 1;
             }
+
+            return `${base}${proximoNumero === 0 ? '' : proximoNumero}`;
         }
 
-        async function carregarFila() {
+        // ----- Cadastrar -----
+        async function cadastrarNaFila() {
+            const base = nomeInput.value.trim();
+            if (base === '') {
+                mensagemInfoEl.innerHTML = '⚠️ Digite um nome para cadastrar.';
+                return;
+            }
+
+            await carregarPlanilha();
+
+            // Verifica se já existe alguém com esse nome base
+            const existe = filaData.some(n => n.toLowerCase() === base.toLowerCase());
+            if (existe) {
+                mensagemInfoEl.innerHTML = `⛔ <strong>“${base}”</strong> já está na fila. Use outro nome.`;
+                return;
+            }
+
+            // Gera o próximo nome sequencial
+            const novoNome = gerarProximoNome(base);
+
+            // Envia para a planilha
             try {
-                const response = await fetch(`${API_URL}?action=listar`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    atualizarTabela(data.fila);
+                const url = `${APPEND_URL}?nome=${encodeURIComponent(novoNome)}&t=${Date.now()}`;
+                const response = await fetch(url, { 
+                    method: 'GET', 
+                    cache: 'no-store',
+                    mode: 'cors' 
+                });
+
+                await carregarPlanilha();
+
+                const posicao = filaData.indexOf(novoNome);
+                if (posicao !== -1) {
+                    posicaoAtualEl.textContent = posicao + 1;
+                    mensagemInfoEl.innerHTML = `✅ Cadastrado como <strong>“${novoNome}”</strong> · Posição: ${posicao + 1}ª`;
+                } else {
+                    mensagemInfoEl.innerHTML = `⚠️ Não foi possível cadastrar <strong>“${novoNome}”</strong>.`;
                 }
             } catch (error) {
-                mostrarNotificacao('Erro ao carregar lista!', 'error');
+                console.error('Erro ao cadastrar:', error);
+                mensagemInfoEl.innerHTML = `❌ Erro ao cadastrar: ${error.message}`;
+                await carregarPlanilha();
             }
         }
 
-        function atualizarTabela(fila) {
-            const tbody = document.getElementById('tabelaFila');
-            tbody.innerHTML = '';
+        // ----- Buscar posição -----
+        async function buscarPosicao() {
+            const base = nomeInput.value.trim();
+            if (base === '') {
+                mensagemInfoEl.innerHTML = '✏️ Digite um nome para buscar.';
+                posicaoAtualEl.textContent = '?';
+                return;
+            }
 
-            fila.forEach((pessoa, index) => {
-                const row = tbody.insertRow();
-                row.innerHTML = `
-                    <td>${index + 1}º</td>
-                    <td>${pessoa.nome}</td>
-                    <td>
-                        <button class="delete-btn" onclick="removerPessoa('${pessoa.nome}')">Remover</button>
-                    </td>
-                `;
-            });
+            await carregarPlanilha();
+            const total = filaData.length;
+            if (total === 0) {
+                posicaoAtualEl.textContent = '—';
+                mensagemInfoEl.innerHTML = '📭 A fila está vazia.';
+                return;
+            }
 
-            document.getElementById('counter').textContent = 
-                fila.length + (fila.length === 1 ? ' pessoa' : ' pessoas');
+            // Busca nomes que começam com a base
+            const encontrados = filaData.filter(n => n.toLowerCase().startsWith(base.toLowerCase()));
+            if (encontrados.length === 0) {
+                posicaoAtualEl.textContent = '—';
+                mensagemInfoEl.innerHTML = `🔎 Nenhum nome começando com <strong>“${base}”</strong> encontrado.`;
+            } else {
+                const primeiroEncontrado = encontrados[0];
+                const posicao = filaData.indexOf(primeiroEncontrado);
+                posicaoAtualEl.textContent = posicao + 1;
+                
+                // Mostra todos os encontrados
+                const listaNomes = encontrados.join(', ');
+                mensagemInfoEl.innerHTML = `🎯 <strong>“${base}”</strong> está na posição <strong>${posicao + 1}ª</strong> · Nomes encontrados: ${listaNomes}`;
+            }
         }
 
-        document.getElementById('nome').addEventListener('keypress', function(e) {
+        // ----- Refresh -----
+        async function refreshUI() {
+            await carregarPlanilha();
+            const base = nomeInput.value.trim();
+            if (base !== '' && filaData.length > 0) {
+                const encontrados = filaData.filter(n => n.toLowerCase().startsWith(base.toLowerCase()));
+                if (encontrados.length > 0) {
+                    const pos = filaData.indexOf(encontrados[0]);
+                    posicaoAtualEl.textContent = pos + 1;
+                    mensagemInfoEl.innerHTML = `🔄 Atualizado: <strong>“${base}”</strong> está na ${pos + 1}ª posição.`;
+                } else {
+                    mensagemInfoEl.innerHTML = '🔄 Fila atualizada.';
+                }
+            } else if (filaData.length === 0) {
+                posicaoAtualEl.textContent = '—';
+                mensagemInfoEl.innerHTML = '📭 Fila vazia.';
+            } else {
+                mensagemInfoEl.innerHTML = '🔄 Dados recarregados.';
+            }
+        }
+
+        // ----- Eventos -----
+        cadastrarBtn.addEventListener('click', cadastrarNaFila);
+        buscarBtn.addEventListener('click', buscarPosicao);
+
+        nomeInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
-                adicionarPessoa();
+                e.preventDefault();
+                buscarPosicao();
             }
         });
 
-        // Carregar fila ao abrir
-        carregarFila();
-    </script>
+        refreshLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            refreshUI();
+        });
+
+        // ----- Inicialização -----
+        carregarPlanilha().then(() => {
+            mensagemInfoEl.innerHTML = '📍 Pronto! Digite seu nome e cadastre-se.';
+        });
+
+        // Atualização automática a cada 30 segundos
+        setInterval(refreshUI, 30000);
+    })();
+</script>
+
 </body>
 </html>
