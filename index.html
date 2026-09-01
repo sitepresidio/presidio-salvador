@@ -9,29 +9,36 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #eef2f7; min-height: 100vh; padding: 1.5rem; display: flex; justify-content: center; }
         .container { max-width: 1000px; width: 100%; }
+        
+        /* HEADER */
         .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; background: #ffffff; padding: 1.2rem 2rem; border-radius: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
         .header h1 { font-size: 1.6rem; font-weight: 700; color: #0b1e33; display: flex; align-items: center; gap: 0.5rem; }
         .header-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
         .header-actions button { padding: 0.6rem 1.2rem; border: none; border-radius: 60px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.4rem; }
-        .btn-admin { background: #1a3b5c; color: white; }
-        .btn-admin:hover { background: #0f2a44; }
-        .btn-admin.ativo { background: #d1fae5; color: #065f46; }
-        .btn-fechar { background: #fee2e2; color: #991b1b; }
-        .btn-fechar:hover { background: #fecaca; }
-        .btn-fechar.aberto { background: #d1fae5; color: #065f46; }
-        .btn-fechar.aberto:hover { background: #a7f3d0; }
-        .btn-atualizar { background: #e0e7ff; color: #3730a3; }
-        .btn-atualizar:hover { background: #c7d2fe; }
-        .btn-resetar { background: #fef2f2; color: #991b1b; }
-        .btn-resetar:hover { background: #fecaca; }
+        
+        /* ABA NAVEGAÇÃO */
+        .tab-nav { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .tab-nav button { padding: 0.7rem 1.8rem; border: none; border-radius: 60px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.2s; background: #e5e7eb; color: #374151; }
+        .tab-nav button.ativo { background: #1a3b5c; color: white; }
+        .tab-nav button:hover:not(.ativo) { background: #d1d5db; }
+        
+        /* ABAS */
+        .tab-content { display: none; }
+        .tab-content.ativo { display: block; }
+        
+        /* CARDS */
         .card { background: #ffffff; border-radius: 1.5rem; padding: 1.5rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 1.5rem; }
         .card-title { font-size: 1rem; font-weight: 600; color: #374151; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        
+        /* STATUS */
         .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
         .status-item { background: #f8fafc; padding: 0.8rem 1.2rem; border-radius: 1rem; text-align: center; }
         .status-item .numero { font-size: 2rem; font-weight: 700; color: #0b1e33; }
         .status-item .label { font-size: 0.8rem; color: #6b7280; }
         .status-item.fechado { background: #fef2f2; border: 2px solid #fca5a5; }
         .status-item.fechado .numero { color: #991b1b; }
+        
+        /* INPUT */
         .input-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
         .input-row input { flex: 2 1 200px; padding: 0.8rem 1.2rem; border: 1px solid #d4dde8; border-radius: 60px; font-size: 1rem; background: #fafcff; transition: 0.15s; outline: none; font-weight: 500; }
         .input-row input:focus { border-color: #2d7aff; box-shadow: 0 0 0 3px rgba(45,122,255,0.2); background: white; }
@@ -43,10 +50,21 @@
         .btn-cadastrar:disabled { background: #9ca3af; cursor: not-allowed; }
         .btn-buscar { background: #e8eff8; color: #1a3b5c; }
         .btn-buscar:hover { background: #d5e2f0; transform: scale(0.98); }
+        
+        .btn-admin-acao { background: #1a3b5c; color: white; }
+        .btn-admin-acao:hover { background: #0f2a44; transform: scale(0.98); }
+        .btn-admin-acao.danger { background: #dc2626; }
+        .btn-admin-acao.danger:hover { background: #b91c1c; }
+        .btn-admin-acao.success { background: #16a34a; }
+        .btn-admin-acao.success:hover { background: #15803d; }
+        .btn-admin-acao:disabled { background: #9ca3af; cursor: not-allowed; }
+        
         .info-box { background: #f2f8ff; border-radius: 1rem; padding: 1rem 1.4rem; border-left: 5px solid #2d7aff; display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.2rem; margin-top: 0.5rem; }
         .info-box .icone { font-size: 1.6rem; }
         .info-box .mensagem { font-weight: 500; color: #1d3a5c; flex: 1; }
         .info-box .mensagem strong { color: #0b1e33; }
+        
+        /* TABELA */
         .tabela-wrapper { overflow-x: auto; border-radius: 1rem; border: 1px solid #e5e7eb; }
         table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
         thead { background: #f8fafc; }
@@ -55,15 +73,17 @@
         tr:hover td { background: #fafbfc; }
         .posicao-col { font-weight: 600; color: #6b7280; width: 60px; }
         .vazio { text-align: center; color: #9ca3af; padding: 2rem 0; }
+        
         .aviso { background: #fefce8; border: 1px solid #fde68a; border-radius: 1rem; padding: 0.8rem 1.2rem; color: #78350f; font-size: 0.9rem; display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
         .aviso.erro { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
         .aviso.sucesso { background: #d1fae5; border-color: #6ee7b7; color: #065f46; }
-        .hidden { display: none !important; }
         .badge { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; }
+        .hidden { display: none !important; }
         .detalhes-fila { margin-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; background: #fafdff; padding: 0.8rem 1.2rem; border-radius: 60px; border: 1px solid #e3ecf5; font-size: 0.9rem; font-weight: 500; color: #1f3a57; }
         .detalhes-fila span { display: inline-flex; align-items: center; gap: 0.25rem; }
         .iframe-container { width: 100%; height: 400px; border: 1px solid #e5e7eb; border-radius: 1rem; overflow: hidden; margin-top: 1rem; }
         .iframe-container iframe { width: 100%; height: 100%; border: none; }
+        
         @media (max-width: 600px) {
             .header { flex-direction: column; align-items: stretch; padding: 1rem; }
             .header-actions { justify-content: stretch; }
@@ -73,23 +93,33 @@
             .input-row { flex-direction: column; }
             .btn-group { flex-direction: column; }
             .iframe-container { height: 300px; }
+            .tab-nav { justify-content: center; }
+            .tab-nav button { flex: 1; text-align: center; padding: 0.6rem 1rem; font-size: 0.85rem; }
         }
     </style>
 </head>
 <body>
 <div class="container">
+    <!-- HEADER -->
     <div class="header">
         <h1 id="headerTitulo">📋 Fila de Visitas</h1>
         <div class="header-actions">
-            <button id="btnAdminToggle" class="btn-admin">🔐 Admin</button>
-            <button id="btnFecharInscricoes" class="btn-fechar aberto">✅ Abertas</button>
-            <button id="btnAtualizar" class="btn-atualizar">↻ Atualizar</button>
-            <button id="btnResetar" class="btn-resetar">🗑️ Resetar</button>
+            <button id="btnAtualizar" class="btn-atualizar" style="background:#e0e7ff;color:#3730a3;padding:0.6rem 1.2rem;border:none;border-radius:60px;font-weight:600;font-size:0.9rem;cursor:pointer;">↻ Atualizar</button>
         </div>
     </div>
+    
+    <!-- NAVEGAÇÃO ENTRE ABAS -->
+    <div class="tab-nav">
+        <button class="tab-btn ativo" data-tab="tabCadastro">📝 Cadastro</button>
+        <button class="tab-btn" data-tab="tabAdmin">🔐 Administrador</button>
+    </div>
+    
     <div id="avisoContainer"></div>
     
-    <div id="modoPublico">
+    <!-- ============================================ -->
+    <!-- ABA 1: CADASTRO PÚBLICO -->
+    <!-- ============================================ -->
+    <div id="tabCadastro" class="tab-content ativo">
         <div class="card">
             <div class="card-title">📊 Status da fila</div>
             <div class="status-grid">
@@ -101,7 +131,7 @@
         <div class="card">
             <div class="card-title">✏️ Entrar na fila</div>
             <div class="input-row">
-                <input type="text" id="nomeInput" placeholder="Para a pessoa colocar o nome completo" value="" />
+                <input type="text" id="nomeInput" placeholder="Nome completo. Para o cadastro" value="" />
                 <div class="btn-group">
                     <button class="btn-cadastrar" id="cadastrarBtn">➕ Cadastrar</button>
                     <button class="btn-buscar" id="buscarBtn">🔍 Minha posição</button>
@@ -122,16 +152,33 @@
         </div>
     </div>
     
-    <div id="modoAdmin" class="hidden">
+    <!-- ============================================ -->
+    <!-- ABA 2: ADMINISTRADOR -->
+    <!-- ============================================ -->
+    <div id="tabAdmin" class="tab-content">
         <div class="card">
-            <div class="card-title">📋 Lista completa <span style="font-weight:400;font-size:0.85rem;color:#6b7280;margin-left:0.5rem;" id="contadorLista">(0 pessoas)</span></div>
+            <div class="card-title">🔐 Controles do Administrador</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.8rem;margin-bottom:1rem;">
+                <button id="btnAdminFechar" class="btn-admin-acao success" style="background:#16a34a;color:white;padding:0.7rem 1.5rem;border:none;border-radius:60px;font-weight:600;cursor:pointer;">🔒 Fechar inscrições</button>
+                <button id="btnAdminAbrir" class="btn-admin-acao" style="background:#1a3b5c;color:white;padding:0.7rem 1.5rem;border:none;border-radius:60px;font-weight:600;cursor:pointer;">🔓 Abrir inscrições</button>
+                <button id="btnAdminResetar" class="btn-admin-acao danger" style="background:#dc2626;color:white;padding:0.7rem 1.5rem;border:none;border-radius:60px;font-weight:600;cursor:pointer;">🗑️ Resetar fila</button>
+                <button id="btnAdminAtualizar" class="btn-admin-acao" style="background:#3730a3;color:white;padding:0.7rem 1.5rem;border:none;border-radius:60px;font-weight:600;cursor:pointer;">↻ Atualizar</button>
+            </div>
+            <div id="adminStatus" style="background:#f8fafc;padding:0.8rem 1.2rem;border-radius:1rem;font-weight:500;color:#1f2937;">
+                Status atual: <span id="adminStatusTexto">✅ Inscrições abertas</span> · Total na fila: <span id="adminTotalPessoas">0</span>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">📋 Lista completa da fila <span style="font-weight:400;font-size:0.85rem;color:#6b7280;margin-left:0.5rem;" id="adminContadorLista">(0 pessoas)</span></div>
             <div class="tabela-wrapper">
                 <table>
                     <thead><tr><th>#</th><th>Nome</th><th style="text-align:right;">Posição</th></tr></thead>
-                    <tbody id="tabelaCorpo"><tr><td colspan="3" class="vazio">Carregando...</td></tr></tbody>
+                    <tbody id="adminTabelaCorpo"><tr><td colspan="3" class="vazio">Carregando...</td></tr></tbody>
                 </table>
             </div>
         </div>
+        
         <div class="card">
             <div class="card-title">📊 Visualizar planilha completa</div>
             <div class="iframe-container">
@@ -148,7 +195,7 @@
 <script>
     (function() {
         // ============================================================
-        // CONFIGURAÇÃO - URL ATUALIZADA DO APPS SCRIPT
+        // CONFIGURAÇÃO
         // ============================================================
         const STORAGE_KEY = 'fila_visitas_dados';
         const APPEND_URL = 'https://script.google.com/macros/s/AKfycbyp0fHL6sJ26VEipcRfT_h4Cmd2L70cmqrJ9rJnokLQwPLVWTmU_pUO-fmb_b_81NQHyA/exec';
@@ -162,9 +209,7 @@
                         return parsed;
                     }
                 }
-            } catch (e) {
-                console.error('Erro ao carregar dados:', e);
-            }
+            } catch (e) { console.error('Erro ao carregar dados:', e); }
             return [];
         }
         
@@ -174,15 +219,8 @@
 
         let filaData = carregarDados();
         let inscricoesAbertas = true;
-        let modoAdminAtivo = false;
-
-        // Elementos
-        const modoPublico = document.getElementById('modoPublico');
-        const modoAdmin = document.getElementById('modoAdmin');
-        const btnAdminToggle = document.getElementById('btnAdminToggle');
-        const btnFechar = document.getElementById('btnFecharInscricoes');
-        const btnAtualizar = document.getElementById('btnAtualizar');
-        const btnResetar = document.getElementById('btnResetar');
+        
+        // Elementos - Aba Cadastro
         const totalPessoasEl = document.getElementById('totalPessoas');
         const primeiroNomeEl = document.getElementById('primeiroNome');
         const ultimoNomeEl = document.getElementById('ultimoNome');
@@ -194,10 +232,36 @@
         const nomeInput = document.getElementById('nomeInput');
         const cadastrarBtn = document.getElementById('cadastrarBtn');
         const buscarBtn = document.getElementById('buscarBtn');
-        const tabelaCorpo = document.getElementById('tabelaCorpo');
-        const contadorLista = document.getElementById('contadorLista');
         const avisoContainer = document.getElementById('avisoContainer');
-        const headerTitulo = document.getElementById('headerTitulo');
+        
+        // Elementos - Aba Admin
+        const adminTabelaCorpo = document.getElementById('adminTabelaCorpo');
+        const adminContadorLista = document.getElementById('adminContadorLista');
+        const adminTotalPessoas = document.getElementById('adminTotalPessoas');
+        const adminStatusTexto = document.getElementById('adminStatusTexto');
+        const btnAdminFechar = document.getElementById('btnAdminFechar');
+        const btnAdminAbrir = document.getElementById('btnAdminAbrir');
+        const btnAdminResetar = document.getElementById('btnAdminResetar');
+        const btnAdminAtualizar = document.getElementById('btnAdminAtualizar');
+        const btnAtualizar = document.getElementById('btnAtualizar');
+
+        // Navegação entre abas
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.dataset.tab;
+                tabBtns.forEach(b => b.classList.remove('ativo'));
+                this.classList.add('ativo');
+                tabContents.forEach(c => c.classList.remove('ativo'));
+                document.getElementById(tabId).classList.add('ativo');
+                // Atualiza a lista admin ao entrar na aba
+                if (tabId === 'tabAdmin') {
+                    atualizarAdmin();
+                }
+            });
+        });
 
         function mostrarAviso(mensagem, tipo = 'info') {
             const div = document.createElement('div');
@@ -208,6 +272,9 @@
             if (tipo !== 'erro') setTimeout(() => { avisoContainer.innerHTML = ''; }, 4000);
         }
 
+        // ============================================================
+        // FUNÇÕES PRINCIPAIS
+        // ============================================================
         function atualizarInterface() {
             const total = filaData.length;
             totalPessoasEl.textContent = total;
@@ -227,15 +294,11 @@
             if (inscricoesAbertas) {
                 statusInscricoesTexto.textContent = '✅ Abertas';
                 statusInscricoesDiv.className = 'status-item';
-                btnFechar.textContent = '🔒 Fechar';
-                btnFechar.className = 'btn-fechar aberto';
                 cadastrarBtn.disabled = false;
                 nomeInput.disabled = false;
             } else {
                 statusInscricoesTexto.textContent = '🔒 Fechadas';
                 statusInscricoesDiv.className = 'status-item fechado';
-                btnFechar.textContent = '🔓 Abrir';
-                btnFechar.className = 'btn-fechar';
                 cadastrarBtn.disabled = true;
                 nomeInput.disabled = true;
                 mensagemInfoEl.innerHTML = '🔒 <strong>Inscrições encerradas</strong> pelo administrador.';
@@ -254,18 +317,26 @@
                 }
             }
             
-            if (modoAdminAtivo) {
-                if (total === 0) {
-                    tabelaCorpo.innerHTML = `<tr><td colspan="3" class="vazio">📭 Nenhuma pessoa na fila</td></tr>`;
-                    contadorLista.textContent = '(0 pessoas)';
-                } else {
-                    let html = '';
-                    filaData.forEach((nome, index) => {
-                        html += `<tr><td class="posicao-col">${index + 1}</td><td class="nome-col">${nome}</td><td style="text-align:right;">${index + 1}º</td></tr>`;
-                    });
-                    tabelaCorpo.innerHTML = html;
-                    contadorLista.textContent = `(${total} pessoas)`;
-                }
+            // Atualiza admin
+            atualizarAdmin();
+        }
+
+        function atualizarAdmin() {
+            const total = filaData.length;
+            adminTotalPessoas.textContent = total;
+            adminStatusTexto.textContent = inscricoesAbertas ? '✅ Inscrições abertas' : '🔒 Inscrições fechadas';
+            adminStatusTexto.style.color = inscricoesAbertas ? '#065f46' : '#991b1b';
+            
+            if (total === 0) {
+                adminTabelaCorpo.innerHTML = `<tr><td colspan="3" class="vazio">📭 Nenhuma pessoa na fila</td></tr>`;
+                adminContadorLista.textContent = '(0 pessoas)';
+            } else {
+                let html = '';
+                filaData.forEach((nome, index) => {
+                    html += `<tr><td class="posicao-col">${index + 1}</td><td class="nome-col">${nome}</td><td style="text-align:right;">${index + 1}º</td></tr>`;
+                });
+                adminTabelaCorpo.innerHTML = html;
+                adminContadorLista.textContent = `(${total} pessoas)`;
             }
         }
 
@@ -281,18 +352,11 @@
             return `${base}${proximoNumero === 0 ? '' : proximoNumero}`;
         }
 
-        // Envia o nome para a planilha via Apps Script
         async function enviarParaPlanilha(nome) {
             try {
                 const url = `${APPEND_URL}?nome=${encodeURIComponent(nome)}&t=${Date.now()}`;
-                console.log('Enviando para:', url);
-                const response = await fetch(url, { 
-                    method: 'GET', 
-                    cache: 'no-store',
-                    mode: 'cors' 
-                });
+                const response = await fetch(url, { method: 'GET', cache: 'no-store', mode: 'cors' });
                 const texto = await response.text();
-                console.log('Resposta do Apps Script:', texto);
                 return texto.includes('OK');
             } catch (error) {
                 console.error('Erro ao enviar para planilha:', error);
@@ -300,6 +364,9 @@
             }
         }
 
+        // ============================================================
+        // CADASTRO PÚBLICO
+        // ============================================================
         async function cadastrarNaFila() {
             if (!inscricoesAbertas) {
                 mensagemInfoEl.innerHTML = '🔒 <strong>Inscrições encerradas</strong> pelo administrador.';
@@ -320,11 +387,9 @@
             
             const novoNome = gerarProximoNome(nomeCompleto);
             
-            // Adiciona ao localStorage
             filaData.push(novoNome);
             salvarDados(filaData);
             
-            // Envia para a planilha
             const enviado = await enviarParaPlanilha(novoNome);
             
             if (enviado) {
@@ -367,33 +432,25 @@
             }
         }
 
-        function toggleInscricoes() {
-            inscricoesAbertas = !inscricoesAbertas;
+        // ============================================================
+        // ADMINISTRADOR
+        // ============================================================
+        function adminFecharInscricoes() {
+            inscricoesAbertas = false;
+            salvarDados(filaData);
             atualizarInterface();
-            mostrarAviso(`📌 Inscrições ${inscricoesAbertas ? 'abertas' : 'fechadas'}!`, 'sucesso');
+            mostrarAviso('🔒 Inscrições fechadas pelo administrador!', 'sucesso');
         }
 
-        function toggleAdmin() {
-            modoAdminAtivo = !modoAdminAtivo;
-            if (modoAdminAtivo) {
-                modoPublico.classList.add('hidden');
-                modoAdmin.classList.remove('hidden');
-                btnAdminToggle.textContent = '👤 Sair Admin';
-                btnAdminToggle.className = 'btn-admin ativo';
-                headerTitulo.textContent = '🔐 Admin · Fila de Visitas';
-                atualizarInterface();
-            } else {
-                modoPublico.classList.remove('hidden');
-                modoAdmin.classList.add('hidden');
-                btnAdminToggle.textContent = '🔐 Admin';
-                btnAdminToggle.className = 'btn-admin';
-                headerTitulo.textContent = '📋 Fila de Visitas';
-                atualizarInterface();
-            }
+        function adminAbrirInscricoes() {
+            inscricoesAbertas = true;
+            salvarDados(filaData);
+            atualizarInterface();
+            mostrarAviso('✅ Inscrições abertas pelo administrador!', 'sucesso');
         }
 
-        function resetarFila() {
-            if (confirm('Tem certeza que deseja resetar a fila? Isso apagará todos os nomes.')) {
+        function adminResetarFila() {
+            if (confirm('⚠️ Tem certeza que deseja resetar a fila? Isso apagará TODOS os nomes permanentemente!')) {
                 filaData = [];
                 salvarDados(filaData);
                 atualizarInterface();
@@ -401,17 +458,24 @@
             }
         }
 
-        // Eventos
-        cadastrarBtn.addEventListener('click', cadastrarNaFila);
-        buscarBtn.addEventListener('click', buscarPosicao);
-        btnFechar.addEventListener('click', toggleInscricoes);
-        btnAtualizar.addEventListener('click', function() {
+        function adminAtualizar() {
             filaData = carregarDados();
             atualizarInterface();
-            mostrarAviso('🔄 Dados recarregados!', 'sucesso');
-        });
-        btnResetar.addEventListener('click', resetarFila);
-        btnAdminToggle.addEventListener('click', toggleAdmin);
+            mostrarAviso('🔄 Dados atualizados!', 'sucesso');
+        }
+
+        // ============================================================
+        // EVENTOS
+        // ============================================================
+        cadastrarBtn.addEventListener('click', cadastrarNaFila);
+        buscarBtn.addEventListener('click', buscarPosicao);
+        btnAtualizar.addEventListener('click', adminAtualizar);
+        
+        btnAdminFechar.addEventListener('click', adminFecharInscricoes);
+        btnAdminAbrir.addEventListener('click', adminAbrirInscricoes);
+        btnAdminResetar.addEventListener('click', adminResetarFila);
+        btnAdminAtualizar.addEventListener('click', adminAtualizar);
+        
         nomeInput.addEventListener('keydown', (e) => { 
             if (e.key === 'Enter') { 
                 e.preventDefault(); 
@@ -419,7 +483,9 @@
             } 
         });
 
-        // Inicialização
+        // ============================================================
+        // INICIALIZAÇÃO
+        // ============================================================
         atualizarInterface();
         if (filaData.length === 0) {
             mostrarAviso('📭 Fila vazia. Cadastre-se agora!', 'info');
