@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fila de Visitas · Admin + Inscrição</title>
+    <title>Fila de Visitas</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,13 +16,14 @@
         .btn-admin { background: #1a3b5c; color: white; }
         .btn-admin:hover { background: #0f2a44; }
         .btn-admin.ativo { background: #d1fae5; color: #065f46; }
-        .btn-admin.ativo:hover { background: #a7f3d0; }
         .btn-fechar { background: #fee2e2; color: #991b1b; }
         .btn-fechar:hover { background: #fecaca; }
         .btn-fechar.aberto { background: #d1fae5; color: #065f46; }
         .btn-fechar.aberto:hover { background: #a7f3d0; }
         .btn-atualizar { background: #e0e7ff; color: #3730a3; }
         .btn-atualizar:hover { background: #c7d2fe; }
+        .btn-resetar { background: #fef2f2; color: #991b1b; }
+        .btn-resetar:hover { background: #fecaca; }
         .card { background: #ffffff; border-radius: 1.5rem; padding: 1.5rem 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 1.5rem; }
         .card-title { font-size: 1rem; font-weight: 600; color: #374151; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
         .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
@@ -56,10 +57,13 @@
         .vazio { text-align: center; color: #9ca3af; padding: 2rem 0; }
         .aviso { background: #fefce8; border: 1px solid #fde68a; border-radius: 1rem; padding: 0.8rem 1.2rem; color: #78350f; font-size: 0.9rem; display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
         .aviso.erro { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+        .aviso.sucesso { background: #d1fae5; border-color: #6ee7b7; color: #065f46; }
         .hidden { display: none !important; }
         .badge { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; }
         .detalhes-fila { margin-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; background: #fafdff; padding: 0.8rem 1.2rem; border-radius: 60px; border: 1px solid #e3ecf5; font-size: 0.9rem; font-weight: 500; color: #1f3a57; }
         .detalhes-fila span { display: inline-flex; align-items: center; gap: 0.25rem; }
+        .iframe-container { width: 100%; height: 400px; border: 1px solid #e5e7eb; border-radius: 1rem; overflow: hidden; margin-top: 1rem; }
+        .iframe-container iframe { width: 100%; height: 100%; border: none; }
         @media (max-width: 600px) {
             .header { flex-direction: column; align-items: stretch; padding: 1rem; }
             .header-actions { justify-content: stretch; }
@@ -68,6 +72,7 @@
             .status-grid { grid-template-columns: 1fr 1fr; }
             .input-row { flex-direction: column; }
             .btn-group { flex-direction: column; }
+            .iframe-container { height: 300px; }
         }
     </style>
 </head>
@@ -79,9 +84,11 @@
             <button id="btnAdminToggle" class="btn-admin">🔐 Admin</button>
             <button id="btnFecharInscricoes" class="btn-fechar aberto">✅ Abertas</button>
             <button id="btnAtualizar" class="btn-atualizar">↻ Atualizar</button>
+            <button id="btnResetar" class="btn-resetar">🗑️ Resetar</button>
         </div>
     </div>
     <div id="avisoContainer"></div>
+    
     <div id="modoPublico">
         <div class="card">
             <div class="card-title">📊 Status da fila</div>
@@ -94,20 +101,27 @@
         <div class="card">
             <div class="card-title">✏️ Entrar na fila</div>
             <div class="input-row">
-                <input type="text" id="nomeInput" placeholder="Escreva seu nome aqui" value="Linda" />
+                <input type="text" id="nomeInput" placeholder="Para a pessoa colocar o nome completo" value="" />
                 <div class="btn-group">
                     <button class="btn-cadastrar" id="cadastrarBtn">➕ Cadastrar</button>
                     <button class="btn-buscar" id="buscarBtn">🔍 Minha posição</button>
                 </div>
             </div>
-            <div class="info-box"><div class="icone">📍</div><div class="mensagem" id="mensagemInfo">Digite seu nome e clique em <strong>"Cadastrar"</strong> ou <strong>"Minha posição"</strong></div></div>
+            <div class="info-box"><div class="icone">📍</div><div class="mensagem" id="mensagemInfo">Digite seu nome completo e clique em <strong>"Cadastrar"</strong> ou <strong>"Minha posição"</strong></div></div>
             <div class="detalhes-fila">
                 <span>📌 Primeiro: <span id="primeiroNome">—</span></span>
                 <span>🕒 Último: <span id="ultimoNome">—</span></span>
                 <span class="badge" id="statusFila">aguardando</span>
             </div>
         </div>
+        <div class="card">
+            <div class="card-title">📊 Visualizar planilha</div>
+            <div class="iframe-container">
+                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS9DClMIBGK8vB8csX1N2cZGkhJjS1KdLN9POdy-3gUwL3AT_Zxw8sEuqWVZL6cS8JRXvyjTIQ6HFPZ/pubhtml?widget=true&amp;headers=false"></iframe>
+            </div>
+        </div>
     </div>
+    
     <div id="modoAdmin" class="hidden">
         <div class="card">
             <div class="card-title">📋 Lista completa <span style="font-weight:400;font-size:0.85rem;color:#6b7280;margin-left:0.5rem;" id="contadorLista">(0 pessoas)</span></div>
@@ -118,19 +132,49 @@
                 </table>
             </div>
         </div>
+        <div class="card">
+            <div class="card-title">📊 Visualizar planilha completa</div>
+            <div class="iframe-container">
+                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS9DClMIBGK8vB8csX1N2cZGkhJjS1KdLN9POdy-3gUwL3AT_Zxw8sEuqWVZL6cS8JRXvyjTIQ6HFPZ/pubhtml?widget=true&amp;headers=false"></iframe>
+            </div>
+        </div>
     </div>
-    <div style="text-align:center;font-size:0.8rem;color:#9ca3af;padding:1rem 0;">Fila de Visitas · v2.0</div>
+    
+    <div style="text-align:center;font-size:0.8rem;color:#9ca3af;padding:1rem 0;">
+        Fila de Visitas · v2.0
+    </div>
 </div>
+
 <script>
     (function() {
         // ============================================================
-        // CONFIGURAÇÃO - APENAS UMA VEZ, SEM DUPLICIDADE
+        // CONFIGURAÇÃO - URL ATUALIZADA DO APPS SCRIPT
         // ============================================================
-        const SPREADSHEET_ID = '1HDM6b1PWGxtw-1wq9KcfGgamqGZBrtHINE_irldqGxM';
-        const APPEND_URL = 'https://script.google.com/macros/s/AKfycbybfdxCyPUWG9P8AOLxQq_2iuKsEZ1IDorJzZeIdphjRvrk_yIjy764EXvZaKNTfQ4n/exec';
-        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
+        const STORAGE_KEY = 'fila_visitas_dados';
+        const APPEND_URL = 'https://script.google.com/macros/s/AKfycbyp0fHL6sJ26VEipcRfT_h4Cmd2L70cmqrJ9rJnokLQwPLVWTmU_pUO-fmb_b_81NQHyA/exec';
+        
+        function carregarDados() {
+            try {
+                const dados = localStorage.getItem(STORAGE_KEY);
+                if (dados) {
+                    const parsed = JSON.parse(dados);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        return parsed;
+                    }
+                }
+            } catch (e) {
+                console.error('Erro ao carregar dados:', e);
+            }
+            return [];
+        }
+        
+        function salvarDados(dados) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+        }
 
-        console.log('📊 URL de leitura:', CSV_URL);
+        let filaData = carregarDados();
+        let inscricoesAbertas = true;
+        let modoAdminAtivo = false;
 
         // Elementos
         const modoPublico = document.getElementById('modoPublico');
@@ -138,6 +182,7 @@
         const btnAdminToggle = document.getElementById('btnAdminToggle');
         const btnFechar = document.getElementById('btnFecharInscricoes');
         const btnAtualizar = document.getElementById('btnAtualizar');
+        const btnResetar = document.getElementById('btnResetar');
         const totalPessoasEl = document.getElementById('totalPessoas');
         const primeiroNomeEl = document.getElementById('primeiroNome');
         const ultimoNomeEl = document.getElementById('ultimoNome');
@@ -154,41 +199,19 @@
         const avisoContainer = document.getElementById('avisoContainer');
         const headerTitulo = document.getElementById('headerTitulo');
 
-        let filaData = [];
-        let inscricoesAbertas = true;
-        let modoAdminAtivo = false;
-
         function mostrarAviso(mensagem, tipo = 'info') {
             const div = document.createElement('div');
-            div.className = `aviso ${tipo === 'erro' ? 'erro' : ''}`;
+            div.className = `aviso ${tipo === 'erro' ? 'erro' : tipo === 'sucesso' ? 'sucesso' : ''}`;
             div.innerHTML = mensagem;
             avisoContainer.innerHTML = '';
             avisoContainer.appendChild(div);
             if (tipo !== 'erro') setTimeout(() => { avisoContainer.innerHTML = ''; }, 4000);
         }
 
-        async function carregarPlanilha() {
-            try {
-                const response = await fetch(CSV_URL, { cache: 'no-store' });
-                if (!response.ok) throw new Error(`HTTP ${response.status} - ${response.statusText}`);
-                const csvText = await response.text();
-                const linhas = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
-                filaData = linhas.map(line => {
-                    const campos = line.split(',');
-                    return campos.length > 0 ? campos[0].trim() : '';
-                }).filter(nome => nome !== '');
-                atualizarInterface();
-                return true;
-            } catch (error) {
-                console.error('Erro ao carregar:', error);
-                mostrarAviso(`⚠️ Erro ao carregar dados: <strong>${error.message}</strong><br><small>Verifique se a planilha está publicada e compartilhada.</small>`, 'erro');
-                return false;
-            }
-        }
-
         function atualizarInterface() {
             const total = filaData.length;
             totalPessoasEl.textContent = total;
+            
             if (total > 0) {
                 primeiroNomeEl.textContent = filaData[0];
                 ultimoNomeEl.textContent = filaData[total - 1];
@@ -200,6 +223,7 @@
                 statusFilaEl.textContent = '⏸️ vazia';
                 statusFilaEl.style.background = '#f1f3f4';
             }
+            
             if (inscricoesAbertas) {
                 statusInscricoesTexto.textContent = '✅ Abertas';
                 statusInscricoesDiv.className = 'status-item';
@@ -216,6 +240,7 @@
                 nomeInput.disabled = true;
                 mensagemInfoEl.innerHTML = '🔒 <strong>Inscrições encerradas</strong> pelo administrador.';
             }
+            
             const nomeBuscado = nomeInput.value.trim();
             if (nomeBuscado === '' || total === 0) {
                 posicaoAtualEl.textContent = total === 0 ? '—' : '?';
@@ -228,6 +253,7 @@
                     posicaoAtualEl.textContent = '—';
                 }
             }
+            
             if (modoAdminAtivo) {
                 if (total === 0) {
                     tabelaCorpo.innerHTML = `<tr><td colspan="3" class="vazio">📭 Nenhuma pessoa na fila</td></tr>`;
@@ -255,71 +281,96 @@
             return `${base}${proximoNumero === 0 ? '' : proximoNumero}`;
         }
 
+        // Envia o nome para a planilha via Apps Script
+        async function enviarParaPlanilha(nome) {
+            try {
+                const url = `${APPEND_URL}?nome=${encodeURIComponent(nome)}&t=${Date.now()}`;
+                console.log('Enviando para:', url);
+                const response = await fetch(url, { 
+                    method: 'GET', 
+                    cache: 'no-store',
+                    mode: 'cors' 
+                });
+                const texto = await response.text();
+                console.log('Resposta do Apps Script:', texto);
+                return texto.includes('OK');
+            } catch (error) {
+                console.error('Erro ao enviar para planilha:', error);
+                return false;
+            }
+        }
+
         async function cadastrarNaFila() {
             if (!inscricoesAbertas) {
                 mensagemInfoEl.innerHTML = '🔒 <strong>Inscrições encerradas</strong> pelo administrador.';
                 return;
             }
-            const base = nomeInput.value.trim();
-            if (base === '') {
-                mensagemInfoEl.innerHTML = '⚠️ Digite um nome para cadastrar.';
+            
+            const nomeCompleto = nomeInput.value.trim();
+            if (nomeCompleto === '') {
+                mensagemInfoEl.innerHTML = '⚠️ Digite o nome completo para cadastrar.';
                 return;
             }
-            await carregarPlanilha();
-            const existe = filaData.some(n => n.toLowerCase() === base.toLowerCase());
+            
+            const existe = filaData.some(n => n.toLowerCase() === nomeCompleto.toLowerCase());
             if (existe) {
-                mensagemInfoEl.innerHTML = `⛔ <strong>“${base}”</strong> já está na fila. Use outro nome.`;
+                mensagemInfoEl.innerHTML = `⛔ <strong>“${nomeCompleto}”</strong> já está na fila. Use outro nome.`;
                 return;
             }
-            const novoNome = gerarProximoNome(base);
-            try {
-                const url = `${APPEND_URL}?nome=${encodeURIComponent(novoNome)}&t=${Date.now()}`;
-                await fetch(url, { method: 'GET', cache: 'no-store', mode: 'cors' });
-                await carregarPlanilha();
-                const posicao = filaData.indexOf(novoNome);
-                if (posicao !== -1) {
-                    posicaoAtualEl.textContent = posicao + 1;
-                    mensagemInfoEl.innerHTML = `✅ Cadastrado como <strong>“${novoNome}”</strong> · Posição: ${posicao + 1}ª`;
-                } else {
-                    mensagemInfoEl.innerHTML = `⚠️ Não foi possível cadastrar <strong>“${novoNome}”</strong>.`;
-                }
-            } catch (error) {
-                console.error('Erro ao cadastrar:', error);
-                mensagemInfoEl.innerHTML = `❌ Erro ao cadastrar: ${error.message}`;
-                await carregarPlanilha();
+            
+            const novoNome = gerarProximoNome(nomeCompleto);
+            
+            // Adiciona ao localStorage
+            filaData.push(novoNome);
+            salvarDados(filaData);
+            
+            // Envia para a planilha
+            const enviado = await enviarParaPlanilha(novoNome);
+            
+            if (enviado) {
+                mostrarAviso(`✅ “${novoNome}” cadastrado com sucesso na planilha!`, 'sucesso');
+            } else {
+                mostrarAviso(`⚠️ “${novoNome}” cadastrado localmente, mas houve erro ao salvar na planilha.`, 'erro');
             }
+            
+            atualizarInterface();
+            
+            const posicao = filaData.indexOf(novoNome);
+            posicaoAtualEl.textContent = posicao + 1;
+            mensagemInfoEl.innerHTML = `✅ Cadastrado como <strong>“${novoNome}”</strong> · Posição: ${posicao + 1}ª`;
         }
 
-        async function buscarPosicao() {
-            const base = nomeInput.value.trim();
-            if (base === '') {
-                mensagemInfoEl.innerHTML = '✏️ Digite um nome para buscar.';
+        function buscarPosicao() {
+            const nomeCompleto = nomeInput.value.trim();
+            if (nomeCompleto === '') {
+                mensagemInfoEl.innerHTML = '✏️ Digite o nome completo para buscar.';
                 posicaoAtualEl.textContent = '?';
                 return;
             }
-            await carregarPlanilha();
+            
             const total = filaData.length;
             if (total === 0) {
                 posicaoAtualEl.textContent = '—';
                 mensagemInfoEl.innerHTML = '📭 A fila está vazia.';
                 return;
             }
-            const encontrados = filaData.filter(n => n.toLowerCase().startsWith(base.toLowerCase()));
+            
+            const encontrados = filaData.filter(n => n.toLowerCase().startsWith(nomeCompleto.toLowerCase()));
             if (encontrados.length === 0) {
                 posicaoAtualEl.textContent = '—';
-                mensagemInfoEl.innerHTML = `🔎 Nenhum nome começando com <strong>“${base}”</strong> encontrado.`;
+                mensagemInfoEl.innerHTML = `🔎 Nenhum nome começando com <strong>“${nomeCompleto}”</strong> encontrado.`;
             } else {
                 const primeiroEncontrado = encontrados[0];
                 const posicao = filaData.indexOf(primeiroEncontrado);
                 posicaoAtualEl.textContent = posicao + 1;
-                mensagemInfoEl.innerHTML = `🎯 <strong>“${base}”</strong> está na posição <strong>${posicao + 1}ª</strong> · Nomes: ${encontrados.join(', ')}`;
+                mensagemInfoEl.innerHTML = `🎯 <strong>“${nomeCompleto}”</strong> está na posição <strong>${posicao + 1}ª</strong> · Nomes: ${encontrados.join(', ')}`;
             }
         }
 
         function toggleInscricoes() {
             inscricoesAbertas = !inscricoesAbertas;
             atualizarInterface();
-            mostrarAviso(`📌 Inscrições ${inscricoesAbertas ? 'abertas' : 'fechadas'}!`, 'info');
+            mostrarAviso(`📌 Inscrições ${inscricoesAbertas ? 'abertas' : 'fechadas'}!`, 'sucesso');
         }
 
         function toggleAdmin() {
@@ -341,15 +392,40 @@
             }
         }
 
+        function resetarFila() {
+            if (confirm('Tem certeza que deseja resetar a fila? Isso apagará todos os nomes.')) {
+                filaData = [];
+                salvarDados(filaData);
+                atualizarInterface();
+                mostrarAviso('🔄 Fila resetada com sucesso!', 'sucesso');
+            }
+        }
+
+        // Eventos
         cadastrarBtn.addEventListener('click', cadastrarNaFila);
         buscarBtn.addEventListener('click', buscarPosicao);
         btnFechar.addEventListener('click', toggleInscricoes);
-        btnAtualizar.addEventListener('click', carregarPlanilha);
+        btnAtualizar.addEventListener('click', function() {
+            filaData = carregarDados();
+            atualizarInterface();
+            mostrarAviso('🔄 Dados recarregados!', 'sucesso');
+        });
+        btnResetar.addEventListener('click', resetarFila);
         btnAdminToggle.addEventListener('click', toggleAdmin);
-        nomeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); buscarPosicao(); } });
+        nomeInput.addEventListener('keydown', (e) => { 
+            if (e.key === 'Enter') { 
+                e.preventDefault(); 
+                buscarPosicao(); 
+            } 
+        });
 
-        carregarPlanilha();
-        setInterval(carregarPlanilha, 30000);
+        // Inicialização
+        atualizarInterface();
+        if (filaData.length === 0) {
+            mostrarAviso('📭 Fila vazia. Cadastre-se agora!', 'info');
+        } else {
+            mostrarAviso(`📋 ${filaData.length} pessoas na fila.`, 'sucesso');
+        }
     })();
 </script>
 </body>
