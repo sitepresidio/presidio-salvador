@@ -58,8 +58,6 @@
         .aviso.erro { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
         .hidden { display: none !important; }
         .badge { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; }
-        .badge-fechado { background: #fee2e2; color: #991b1b; }
-        .badge-aberto { background: #d1fae5; color: #065f46; }
         .detalhes-fila { margin-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; background: #fafdff; padding: 0.8rem 1.2rem; border-radius: 60px; border: 1px solid #e3ecf5; font-size: 0.9rem; font-weight: 500; color: #1f3a57; }
         .detalhes-fila span { display: inline-flex; align-items: center; gap: 0.25rem; }
         @media (max-width: 600px) {
@@ -126,17 +124,15 @@
 <script>
     (function() {
         // ============================================================
-        // CONFIGURAÇÃO CORRIGIDA - COM O ID DA SUA NOVA PLANILHA
+        // CONFIGURAÇÃO - APENAS UMA VEZ, SEM DUPLICIDADE
         // ============================================================
         const SPREADSHEET_ID = '1HDM6b1PWGxtw-1wq9KcfGgamqGZBrtHINE_irldqGxM';
-        // IMPORTANTE: Substitua a URL do APPEND_URL pela do seu novo script, se for diferente.
         const APPEND_URL = 'https://script.google.com/macros/s/AKfycbybfdxCyPUWG9P8AOLxQq_2iuKsEZ1IDorJzZeIdphjRvrk_yIjy764EXvZaKNTfQ4n/exec';
-        // A URL de leitura é montada automaticamente com o ID acima
         const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
 
-        console.log('📊 URL de leitura (CSV):', CSV_URL);
+        console.log('📊 URL de leitura:', CSV_URL);
 
-        // Elementos (mesmos de antes)
+        // Elementos
         const modoPublico = document.getElementById('modoPublico');
         const modoAdmin = document.getElementById('modoAdmin');
         const btnAdminToggle = document.getElementById('btnAdminToggle');
