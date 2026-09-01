@@ -21,6 +21,7 @@
         .tab-nav button { padding: 0.7rem 1.8rem; border: none; border-radius: 60px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.2s; background: #e5e7eb; color: #374151; }
         .tab-nav button.ativo { background: #1a3b5c; color: white; }
         .tab-nav button:hover:not(.ativo) { background: #d1d5db; }
+        .tab-nav button:disabled { opacity: 0.5; cursor: not-allowed; }
         
         /* ABAS */
         .tab-content { display: none; }
@@ -51,7 +52,7 @@
         .btn-buscar { background: #e8eff8; color: #1a3b5c; }
         .btn-buscar:hover { background: #d5e2f0; transform: scale(0.98); }
         
-        .btn-admin-acao { background: #1a3b5c; color: white; }
+        .btn-admin-acao { background: #1a3b5c; color: white; padding: 0.7rem 1.5rem; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .btn-admin-acao:hover { background: #0f2a44; transform: scale(0.98); }
         .btn-admin-acao.danger { background: #dc2626; }
         .btn-admin-acao.danger:hover { background: #b91c1c; }
@@ -84,6 +85,22 @@
         .iframe-container { width: 100%; height: 400px; border: 1px solid #e5e7eb; border-radius: 1rem; overflow: hidden; margin-top: 1rem; }
         .iframe-container iframe { width: 100%; height: 100%; border: none; }
         
+        /* MODAL SENHA */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-overlay.ativo { display: flex; }
+        .modal { background: white; padding: 2rem; border-radius: 1.5rem; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .modal h2 { font-size: 1.4rem; color: #0b1e33; margin-bottom: 0.5rem; }
+        .modal p { color: #6b7280; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .modal input { width: 100%; padding: 0.8rem 1.2rem; border: 1px solid #d4dde8; border-radius: 60px; font-size: 1rem; outline: none; margin-bottom: 1rem; }
+        .modal input:focus { border-color: #2d7aff; box-shadow: 0 0 0 3px rgba(45,122,255,0.2); }
+        .modal .btn-group-modal { display: flex; gap: 0.6rem; }
+        .modal .btn-group-modal button { flex: 1; padding: 0.8rem; border: none; border-radius: 60px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; }
+        .modal .btn-confirmar { background: #1a3b5c; color: white; }
+        .modal .btn-confirmar:hover { background: #0f2a44; }
+        .modal .btn-cancelar { background: #e5e7eb; color: #374151; }
+        .modal .btn-cancelar:hover { background: #d1d5db; }
+        .modal .erro-senha { color: #dc2626; font-size: 0.9rem; margin-top: -0.5rem; margin-bottom: 1rem; display: none; }
+        
         @media (max-width: 600px) {
             .header { flex-direction: column; align-items: stretch; padding: 1rem; }
             .header-actions { justify-content: stretch; }
@@ -95,6 +112,7 @@
             .iframe-container { height: 300px; }
             .tab-nav { justify-content: center; }
             .tab-nav button { flex: 1; text-align: center; padding: 0.6rem 1rem; font-size: 0.85rem; }
+            .modal { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -104,14 +122,14 @@
     <div class="header">
         <h1 id="headerTitulo">📋 Fila de Visitas</h1>
         <div class="header-actions">
-            <button id="btnAtualizar" class="btn-atualizar" style="background:#e0e7ff;color:#3730a3;padding:0.6rem 1.2rem;border:none;border-radius:60px;font-weight:600;font-size:0.9rem;cursor:pointer;">↻ Atualizar</button>
+            <button id="btnAtualizar" style="background:#e0e7ff;color:#3730a3;padding:0.6rem 1.2rem;border:none;border-radius:60px;font-weight:600;font-size:0.9rem;cursor:pointer;">↻ Atualizar</button>
         </div>
     </div>
     
     <!-- NAVEGAÇÃO ENTRE ABAS -->
     <div class="tab-nav">
         <button class="tab-btn ativo" data-tab="tabCadastro">📝 Cadastro</button>
-        <button class="tab-btn" data-tab="tabAdmin">🔐 Administrador</button>
+        <button class="tab-btn" data-tab="tabAdmin" id="btnAdminTab">🔐 Administrador</button>
     </div>
     
     <div id="avisoContainer"></div>
@@ -153,16 +171,16 @@
     </div>
     
     <!-- ============================================ -->
-    <!-- ABA 2: ADMINISTRADOR -->
+    <!-- ABA 2: ADMINISTRADOR (protegida por senha) -->
     <!-- ============================================ -->
     <div id="tabAdmin" class="tab-content">
         <div class="card">
             <div class="card-title">🔐 Controles do Administrador</div>
             <div style="display:flex;flex-wrap:wrap;gap:0.8rem;margin-bottom:1rem;">
-                <button id="btnAdminFechar" class="btn-admin-acao success" style="background:#16a34a;color:white;padding:0.7rem 1.5rem;border:none;border-radius:60px;font-weight:600;cursor:pointer;">🔒 Fechar inscrições</button>
-                <button id="btnAdminAbrir" class="btn-admin-acao" style="background:#1a3b5c;color:white;padding:0.7rem 1.5rem;border:none;border-radius:60px;font-weight:600;cursor:pointer;">🔓 Abrir inscrições</button>
-                <button id="btnAdminResetar" class="btn-admin-acao danger" style="background:#dc2626;color:white;padding:0.7rem 1.5rem;border:none;border-radius:60px;font-weight:600;cursor:pointer;">🗑️ Resetar fila</button>
-                <button id="btnAdminAtualizar" class="btn-admin-acao" style="background:#3730a3;color:white;padding:0.7rem 1.5rem;border:none;border-radius:60px;font-weight:600;cursor:pointer;">↻ Atualizar</button>
+                <button id="btnAdminFechar" class="btn-admin-acao success" style="background:#16a34a;color:white;">🔒 Fechar inscrições</button>
+                <button id="btnAdminAbrir" class="btn-admin-acao" style="background:#1a3b5c;color:white;">🔓 Abrir inscrições</button>
+                <button id="btnAdminResetar" class="btn-admin-acao danger" style="background:#dc2626;color:white;">🗑️ Resetar fila</button>
+                <button id="btnAdminAtualizar" class="btn-admin-acao" style="background:#3730a3;color:white;">↻ Atualizar</button>
             </div>
             <div id="adminStatus" style="background:#f8fafc;padding:0.8rem 1.2rem;border-radius:1rem;font-weight:500;color:#1f2937;">
                 Status atual: <span id="adminStatusTexto">✅ Inscrições abertas</span> · Total na fila: <span id="adminTotalPessoas">0</span>
@@ -192,11 +210,30 @@
     </div>
 </div>
 
+<!-- ============================================ -->
+<!-- MODAL DE SENHA -->
+<!-- ============================================ -->
+<div class="modal-overlay" id="modalSenha">
+    <div class="modal">
+        <h2>🔐 Acesso Administrador</h2>
+        <p>Digite a senha para acessar o painel de administração.</p>
+        <input type="password" id="inputSenha" placeholder="Digite a senha" />
+        <div class="erro-senha" id="erroSenha">❌ Senha incorreta. Tente novamente.</div>
+        <div class="btn-group-modal">
+            <button class="btn-cancelar" id="btnCancelarSenha">Cancelar</button>
+            <button class="btn-confirmar" id="btnConfirmarSenha">✅ Entrar</button>
+        </div>
+    </div>
+</div>
+
 <script>
     (function() {
         // ============================================================
         // CONFIGURAÇÃO
         // ============================================================
+        // ⚠️ ALTERE A SENHA AQUI (padrão: admin123)
+        const SENHA_ADMIN = 'PresidoBahia2026.gov';
+        
         const STORAGE_KEY = 'fila_visitas_dados';
         const APPEND_URL = 'https://script.google.com/macros/s/AKfycbyp0fHL6sJ26VEipcRfT_h4Cmd2L70cmqrJ9rJnokLQwPLVWTmU_pUO-fmb_b_81NQHyA/exec';
         
@@ -219,6 +256,7 @@
 
         let filaData = carregarDados();
         let inscricoesAbertas = true;
+        let adminAutenticado = false;
         
         // Elementos - Aba Cadastro
         const totalPessoasEl = document.getElementById('totalPessoas');
@@ -244,6 +282,14 @@
         const btnAdminResetar = document.getElementById('btnAdminResetar');
         const btnAdminAtualizar = document.getElementById('btnAdminAtualizar');
         const btnAtualizar = document.getElementById('btnAtualizar');
+        const btnAdminTab = document.getElementById('btnAdminTab');
+        
+        // Modal
+        const modalSenha = document.getElementById('modalSenha');
+        const inputSenha = document.getElementById('inputSenha');
+        const erroSenha = document.getElementById('erroSenha');
+        const btnConfirmarSenha = document.getElementById('btnConfirmarSenha');
+        const btnCancelarSenha = document.getElementById('btnCancelarSenha');
 
         // Navegação entre abas
         const tabBtns = document.querySelectorAll('.tab-btn');
@@ -252,15 +298,64 @@
         tabBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 const tabId = this.dataset.tab;
-                tabBtns.forEach(b => b.classList.remove('ativo'));
-                this.classList.add('ativo');
-                tabContents.forEach(c => c.classList.remove('ativo'));
-                document.getElementById(tabId).classList.add('ativo');
-                // Atualiza a lista admin ao entrar na aba
-                if (tabId === 'tabAdmin') {
-                    atualizarAdmin();
+                
+                // Se for a aba Admin e não estiver autenticado
+                if (tabId === 'tabAdmin' && !adminAutenticado) {
+                    abrirModal();
+                    return;
                 }
+                
+                trocarAba(tabId);
             });
+        });
+
+        function trocarAba(tabId) {
+            tabBtns.forEach(b => b.classList.remove('ativo'));
+            document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add('ativo');
+            tabContents.forEach(c => c.classList.remove('ativo'));
+            document.getElementById(tabId).classList.add('ativo');
+            
+            if (tabId === 'tabAdmin') {
+                atualizarAdmin();
+            }
+        }
+
+        function abrirModal() {
+            modalSenha.classList.add('ativo');
+            inputSenha.value = '';
+            erroSenha.style.display = 'none';
+            inputSenha.focus();
+        }
+
+        function fecharModal() {
+            modalSenha.classList.remove('ativo');
+            inputSenha.value = '';
+            erroSenha.style.display = 'none';
+        }
+
+        function verificarSenha() {
+            const senha = inputSenha.value.trim();
+            if (senha === SENHA_ADMIN) {
+                adminAutenticado = true;
+                fecharModal();
+                trocarAba('tabAdmin');
+                mostrarAviso('✅ Acesso concedido! Bem-vindo administrador.', 'sucesso');
+            } else {
+                erroSenha.style.display = 'block';
+                inputSenha.value = '';
+                inputSenha.focus();
+            }
+        }
+
+        // Eventos do modal
+        btnConfirmarSenha.addEventListener('click', verificarSenha);
+        btnCancelarSenha.addEventListener('click', fecharModal);
+        inputSenha.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') verificarSenha();
+            if (e.key === 'Escape') fecharModal();
+        });
+        modalSenha.addEventListener('click', (e) => {
+            if (e.target === modalSenha) fecharModal();
         });
 
         function mostrarAviso(mensagem, tipo = 'info') {
@@ -317,11 +412,11 @@
                 }
             }
             
-            // Atualiza admin
             atualizarAdmin();
         }
 
         function atualizarAdmin() {
+            if (!adminAutenticado) return;
             const total = filaData.length;
             adminTotalPessoas.textContent = total;
             adminStatusTexto.textContent = inscricoesAbertas ? '✅ Inscrições abertas' : '🔒 Inscrições fechadas';
@@ -436,6 +531,7 @@
         // ADMINISTRADOR
         // ============================================================
         function adminFecharInscricoes() {
+            if (!adminAutenticado) return;
             inscricoesAbertas = false;
             salvarDados(filaData);
             atualizarInterface();
@@ -443,6 +539,7 @@
         }
 
         function adminAbrirInscricoes() {
+            if (!adminAutenticado) return;
             inscricoesAbertas = true;
             salvarDados(filaData);
             atualizarInterface();
@@ -450,6 +547,7 @@
         }
 
         function adminResetarFila() {
+            if (!adminAutenticado) return;
             if (confirm('⚠️ Tem certeza que deseja resetar a fila? Isso apagará TODOS os nomes permanentemente!')) {
                 filaData = [];
                 salvarDados(filaData);
